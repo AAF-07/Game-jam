@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://bk8qoml0er6q5"]
 
+[ext_resource type="Script" uid="uid://dkqqh3fe7f16b" path="res://script/monster.gd" id="1_4f2yx"]
 [ext_resource type="Texture2D" uid="uid://barq67eed08is" path="res://icon.svg" id="1_xxklr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xxklr"]
 radius = 64.40497
 
-[node name="Monster" type="Node2D" unique_id=2068469295]
+[node name="Monster" type="CharacterBody2D" unique_id=11607701]
+script = ExtResource("1_4f2yx")
+SPEED = 100.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=402370689]
 modulate = Color(0, 1, 0, 1)
