@@ -6,9 +6,13 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_xxklr"]
 radius = 64.40497
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_4f2yx"]
+radius = 221.00226
+
 [node name="Monster" type="CharacterBody2D" unique_id=11607701]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_4f2yx")
-SPEED = 100.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=402370689]
 modulate = Color(0, 1, 0, 1)
@@ -17,3 +21,11 @@ texture = ExtResource("1_xxklr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1265782429]
 shape = SubResource("CircleShape2D_xxklr")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1955580695]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=363420032]
+shape = SubResource("CircleShape2D_4f2yx")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

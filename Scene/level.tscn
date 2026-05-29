@@ -12,7 +12,7 @@ position = Vector2(578, 316)
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1279136179]
 
 [node name="Soul" parent="." unique_id=1745937791 instance=ExtResource("2_3bu56")]
-position = Vector2(300, 311)
+position = Vector2(870, 165)
 
 [node name="Monster" parent="." unique_id=2068469295 instance=ExtResource("3_jnrmd")]
-position = Vector2(820, 449)
+position = Vector2(918, 328)
