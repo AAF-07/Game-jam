@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bk8qoml0er6q5"]
+
+[ext_resource type="Texture2D" uid="uid://barq67eed08is" path="res://icon.svg" id="1_xxklr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xxklr"]
+radius = 64.40497
+
+[node name="Monster" type="Node2D" unique_id=2068469295]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=402370689]
+modulate = Color(0, 1, 0, 1)
+position = Vector2(-2, 4)
+texture = ExtResource("1_xxklr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1265782429]
+shape = SubResource("CircleShape2D_xxklr")

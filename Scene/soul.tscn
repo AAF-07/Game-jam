@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cqdc1mtuol43a"]
+
+[ext_resource type="Script" uid="uid://cjpeualotuf2x" path="res://script/soul.gd" id="1_558ob"]
+[ext_resource type="Texture2D" uid="uid://barq67eed08is" path="res://icon.svg" id="1_ynk43"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_558ob"]
+radius = 67.20863
+
+[node name="Soul" type="Area2D" unique_id=1745937791]
+script = ExtResource("1_558ob")
+
+[node name="sprite" type="Sprite2D" parent="." unique_id=1876881119]
+texture = ExtResource("1_ynk43")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=11611303]
+shape = SubResource("CircleShape2D_558ob")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

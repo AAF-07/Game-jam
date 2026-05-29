@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://b5myhbv8ntedf"]
 
 [ext_resource type="PackedScene" uid="uid://dp2qkl1hb871u" path="res://Scene/player.tscn" id="1_7wcfd"]
-[ext_resource type="Texture2D" uid="uid://barq67eed08is" path="res://icon.svg" id="2_3bu56"]
+[ext_resource type="PackedScene" uid="uid://cqdc1mtuol43a" path="res://Scene/soul.tscn" id="2_3bu56"]
+[ext_resource type="PackedScene" uid="uid://bk8qoml0er6q5" path="res://Scene/monster.tscn" id="3_jnrmd"]
 
 [node name="Node2D" type="Node2D" unique_id=992683157]
 
@@ -10,6 +11,8 @@ position = Vector2(578, 316)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1279136179]
 
-[node name="Icon" type="Sprite2D" parent="." unique_id=1851808827]
-position = Vector2(227, 237)
-texture = ExtResource("2_3bu56")
+[node name="Soul" parent="." unique_id=1745937791 instance=ExtResource("2_3bu56")]
+position = Vector2(300, 311)
+
+[node name="Monster" parent="." unique_id=2068469295 instance=ExtResource("3_jnrmd")]
+position = Vector2(820, 449)
