@@ -1,13 +1,14 @@
 extends Node2D
 
 # buat control UI Skill check dan sanity
-var sanity = 10
+var sanity = 1
 var soul_collected = 0
 var arrow_key = ["ui_left", "ui_right", "ui_up", "ui_down"]
 var target_sequence = []
 var current_index = 0
 var is_skill_checking = false
 var is_nightmare = false
+var soul_total = 0
 
 @onready var sanity_bar = $CanvasLayer/TextureProgressBar
 @onready var soul_label = $CanvasLayer/Label
@@ -29,21 +30,23 @@ func _ready() -> void:
 		
 		sanity_timer.start()
 		
-	sanity_timer.start() # start timer
-	
+	soul_spawn_random()
 
 func update_ui():
 	if sanity_bar != null:
 		sanity_bar.value = sanity
 	if soul_label != null:
-		soul_label.text = "Soul : " + str(soul_collected)
-
+		soul_label.text = "Soul : " + str(soul_collected) + " / " + str(soul_total)
+		
 func CollectedSoul(amount: int):
 	soul_collected += amount
 	sanity += 5
 	update_ui()
 	print("tambah soul total = ", soul_collected) 
 	print("sanity bertambah =", sanity)
+	
+	if soul_collected >= soul_total and soul_total > 0:
+		win()
 
 func SanityBar(amount: int):
 	sanity = clamp(sanity - amount, 0, 100)
@@ -108,8 +111,20 @@ func start_skill_check():
 
 # PENTING: Tambahkan fungsi input ini agar World tetap bisa membaca tombol saat pause!
 func _input(event: InputEvent) -> void:
+	if get_tree().paused and not is_skill_checking:
+		# Tekan R untuk Restart game dari awal
+		if event is InputEventKey and event.pressed and event.keycode == KEY_R:
+			get_tree().paused = false
+			get_tree().reload_current_scene()
+			return
+		# Tekan ENTER untuk kembali ke Main Menu (Jika ada scene Main Menu nantinya)
+		if event is InputEventKey and event.pressed and event.keycode == KEY_ENTER:
+			get_tree().paused = false
+			# get_tree().change_scene_to_file("res://Scene/main_menu.tscn") # aktifkan jika sudah buat menu
+			return
+			
 	if not is_skill_checking: return
-	
+			
 	for action in arrow_key:
 		if event.is_action_pressed(action):
 			# Cek apakah tombol yang ditekan sesuai urutan
@@ -154,11 +169,11 @@ func skill_check_failed():
 	if sanity_timer != null: sanity_timer.start()
 	
 	if is_nightmare:
-		#game_over()
+		game_over()
 		print("game over")
 
 	
-	get_tree().paused = false # Unpause
+	get_tree().paused = true # Unpause
 
 func nightmare_mode():
 	is_nightmare = true
@@ -168,9 +183,57 @@ func nightmare_mode():
 	
 	var monster = get_node_or_null("Monster")
 	if monster != null:
-		monster.SPEED = 250.0
+		monster.SPEED = 245.0
 		monster.player = $Player
 		monster.player_chase = true
 	
+func soul_spawn_random():
+	if not has_node("SpawnPoint"): 
+		print("Waduh, node SpawnPoint tidak ketemu di scene!")
+		return
+		
+	var points = $SpawnPoint.get_children()
+	if points.size() == 0: 
+		print("Waduh, isi didalam SpawnPoint kosong / tidak terbaca!")
+		return
 	
+	points.shuffle()
+	
+	var _spawn_count = min(5, points.size())
+	soul_total = _spawn_count
+	
+	for i in range(_spawn_count):
+		# Menggunakan load() agar lebih aman mendeteksi file scene soul kamu
+		var soul_scene = load("res://Scene/soul.tscn")
+		if soul_scene:
+			var new_soul = soul_scene.instantiate()
+			new_soul.position = points[i].position
+			add_child(new_soul)
+		else:
+			print("ERROR: File soul.tscn tidak ditemukan di folder res://Scene/")
+	
+	update_ui()
+	
+	
+func win():
+	sanity_timer.stop()
+	skill_check_timer.stop()
+	
+	if skillcheck_label != null:
+		skillcheck_label.text = "WAKE UP\n\nTekan [ R ] untuk Main Lagi"
+		skillcheck_label.show()
+	
+	get_tree().paused = true
+
+func game_over():
+	sanity_timer.stop()
+	skill_check_timer.stop()
+	
+	is_skill_checking = false
+	
+	if skillcheck_label != null:
+		skillcheck_label.text = "YOU ARE TRAPPED IN A NIGHTMARE\n\nTekan [ R ] untuk Mengulang"
+		skillcheck_label.show()
+	
+	get_tree().paused = true
 	

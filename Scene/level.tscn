@@ -2,29 +2,36 @@
 
 [ext_resource type="PackedScene" uid="uid://dp2qkl1hb871u" path="res://Scene/player.tscn" id="1_7wcfd"]
 [ext_resource type="Script" uid="uid://bno2yoosftubp" path="res://script/World.gd" id="1_or6n4"]
-[ext_resource type="PackedScene" uid="uid://cqdc1mtuol43a" path="res://Scene/soul.tscn" id="2_3bu56"]
 [ext_resource type="PackedScene" uid="uid://bk8qoml0er6q5" path="res://Scene/monster.tscn" id="3_jnrmd"]
 
 [node name="Node2D" type="Node2D" unique_id=992683157]
 process_mode = 3
 script = ExtResource("1_or6n4")
 
+[node name="SpawnPoint" type="Node2D" parent="." unique_id=198733320]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoint" unique_id=594392635]
+position = Vector2(103, 246)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoint" unique_id=315792160]
+position = Vector2(231, 589)
+
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoint" unique_id=600055786]
+position = Vector2(565, 927)
+rotation = 3.0044231
+
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoint" unique_id=799149029]
+position = Vector2(1212, 373)
+rotation = 3.0044231
+
+[node name="Marker2D5" type="Marker2D" parent="SpawnPoint" unique_id=1495336415]
+position = Vector2(1430.0001, 159.00006)
+rotation = 3.0044231
+
 [node name="Player" parent="." unique_id=1473777026 instance=ExtResource("1_7wcfd")]
 position = Vector2(578, 316)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1279136179]
-
-[node name="Soul" parent="." unique_id=1745937791 instance=ExtResource("2_3bu56")]
-position = Vector2(887, 157)
-
-[node name="Soul2" parent="." unique_id=1696431279 instance=ExtResource("2_3bu56")]
-position = Vector2(295, 160)
-
-[node name="Soul3" parent="." unique_id=367202844 instance=ExtResource("2_3bu56")]
-position = Vector2(262, 456)
-
-[node name="Soul4" parent="." unique_id=404427180 instance=ExtResource("2_3bu56")]
-position = Vector2(578, 520)
 
 [node name="Monster" parent="." unique_id=2068469295 instance=ExtResource("3_jnrmd")]
 position = Vector2(969, 464)
@@ -64,7 +71,8 @@ anchor_right = 0.851
 anchor_bottom = 0.625
 offset_left = -0.4960022
 offset_top = 0.06399536
-offset_right = -0.35198975
+offset_right = 31.888
+offset_bottom = 15.75
 text = "Skill Check"
 
 [node name="SanityTimer" type="Timer" parent="." unique_id=1314839600]
