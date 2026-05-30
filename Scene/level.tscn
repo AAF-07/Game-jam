@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bk8qoml0er6q5" path="res://Scene/monster.tscn" id="3_jnrmd"]
 
 [node name="Node2D" type="Node2D" unique_id=992683157]
+process_mode = 3
 script = ExtResource("1_or6n4")
 
 [node name="Player" parent="." unique_id=1473777026 instance=ExtResource("1_7wcfd")]
@@ -29,6 +30,7 @@ position = Vector2(578, 520)
 position = Vector2(969, 464)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1108986521]
+process_mode = 2
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1641479836]
 anchors_preset = -1
@@ -53,6 +55,21 @@ offset_right = -0.03199768
 offset_bottom = -0.2800064
 text = "Soul "
 
+[node name="SkillCheckLabel" type="Label" parent="CanvasLayer" unique_id=410947193]
+visible = false
+anchors_preset = -1
+anchor_left = 0.148
+anchor_top = 0.307
+anchor_right = 0.851
+anchor_bottom = 0.625
+offset_left = -0.4960022
+offset_top = 0.06399536
+offset_right = -0.35198975
+text = "Skill Check"
+
 [node name="SanityTimer" type="Timer" parent="." unique_id=1314839600]
 
+[node name="SCTimer" type="Timer" parent="." unique_id=905714236]
+
 [connection signal="timeout" from="SanityTimer" to="." method="_on_sanity_timer_timeout"]
+[connection signal="timeout" from="SCTimer" to="." method="_on_sc_timer_timeout"]

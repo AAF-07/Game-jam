@@ -3,27 +3,34 @@ extends Node2D
 # buat control UI Skill check dan sanity
 var sanity = 100
 var soul_collected = 0
+var arrow_key = ["ui_left", "ui_right", "ui_up", "ui_down"]
+var target_sequence = []
+var current_index = 0
+var is_skill_checking = false
+var is_nightmare = false
 
 @onready var sanity_bar = $CanvasLayer/TextureProgressBar
 @onready var soul_label = $CanvasLayer/Label
+@onready var skillcheck_label = $CanvasLayer/SkillCheckLabel
 
 var sanity_timer: Timer = null
+var skill_check_timer: Timer = null 
 
 func _ready() -> void:
 	update_ui()
-	
-	# PERBAIKAN 2: Cari node berjenis Timer secara otomatis
-	for child in get_children():
+	var timers = []
+	for child in get_children(): # nyari timer sanity
 		if child is Timer:
-			sanity_timer = child
-			break # Jika ketemu, stop pencarian
-			
-	# PERBAIKAN 3: Validasi aman sebelum memanggil .start()
-	if sanity_timer != null:
+			timers.append(child)	
+	
+	if timers.size() >= 2:
+		sanity_timer = timers[0]
+		skill_check_timer = timers[1]
+		
 		sanity_timer.start()
-		print("Keren! Timer otomatis ketemu dan dijalankan.")
-	else:
-		print("Waduh! Masih belum ada node Timer di Scene ini. Coba cek struktur Scene Tree kamu.")
+		
+	sanity_timer.start() # start timer
+	
 
 func update_ui():
 	if sanity_bar != null:
@@ -43,8 +50,127 @@ func SanityBar(amount: int):
 	update_ui()
 
 	if sanity <= 0:
-		print("player gila")
+		nightmare_mode()
 
 func _on_sanity_timer_timeout() -> void:
-	SanityBar(3)
+	if not is_skill_checking:
+		SanityBar(3)
 	print("Sanity berkurang otomatis: ", sanity)
+	
+	if sanity <= 0:
+		sanity_timer.stop()
+	
+	if is_nightmare:
+		sanity_timer.stop()
+
+
+func _on_sc_timer_timeout() -> void:
+	if is_skill_checking:
+		SanityBar(5)
+		print("Sanity bocor deras saat Skill Check: ", sanity)
+
+func update_skill_check_text():
+	if skillcheck_label == null: return
+	var display_text = "TEKAN TOMBOL: \n"
+	for i in range(target_sequence.size()):
+		# Perbaikan typo: .replaced menjadi .replace
+		var arrow_name = target_sequence[i].replace("ui_", "").to_upper()
+		if i < current_index:
+			display_text += "[OK] "
+		else:
+			# Perbaikan typo: display_text dan memanggil arrow_name (bukan arrow_key)
+			display_text += arrow_name + " "
+	skillcheck_label.text = display_text
+
+func start_skill_check():
+	if is_skill_checking: return
+	
+	is_skill_checking = true
+	current_index = 0
+	target_sequence.clear()
+	
+	# 1. HENTIKAN GAME (PAUSE TOTAL)
+	# Ini akan membekukan Player, Monster, dan pergerakan lainnya otomatis
+	get_tree().paused = true
+	
+	if not is_nightmare:
+		if sanity_timer != null: sanity_timer.stop()
+		if skill_check_timer != null: skill_check_timer.start()
+	
+	var range = 10 if is_nightmare else 5
+	for i in range(range):
+		var random_arrow = arrow_key[randi() % arrow_key.size()]
+		target_sequence.append(random_arrow)
+		
+	update_skill_check_text()
+	if skillcheck_label != null:
+		skillcheck_label.show()
+
+# PENTING: Tambahkan fungsi input ini agar World tetap bisa membaca tombol saat pause!
+func _input(event: InputEvent) -> void:
+	if not is_skill_checking: return
+	
+	for action in arrow_key:
+		if event.is_action_pressed(action):
+			# Cek apakah tombol yang ditekan sesuai urutan
+			if action == target_sequence[current_index]:
+				current_index += 1
+				update_skill_check_text()
+				
+				# Jika semua tombol sukses ditekan
+				if current_index >= target_sequence.size():
+					skill_check_success()
+					return # Keluar dari fungsi agar tidak error
+			else:
+				# Jika salah pencet tombol
+				skill_check_failed()
+				return
+
+func skill_check_success():
+	is_skill_checking = false
+	if skillcheck_label != null:
+		skillcheck_label.hide()
+		
+	if skill_check_timer != null: skill_check_timer.stop()
+	if sanity_timer != null: sanity_timer.start()
+	
+	# HADIAH & UNPAUSE GAME
+	sanity = clamp(sanity + 15, 0, 100)
+	update_ui()
+	
+	# KEMBALIKAN GAME AGAR BERJALAN NORMAL LAGI
+	get_tree().paused = false
+	
+	var monster = get_node_or_null("Monster")
+	if monster != null and monster.has_method("stun"):
+		monster.stun(3)
+
+func skill_check_failed():
+	print("Salah pencet! Skill check gagal.")
+
+	is_skill_checking = false
+	if skillcheck_label != null: skillcheck_label.hide()
+	if skill_check_timer != null: skill_check_timer.stop()
+	if sanity_timer != null: sanity_timer.start()
+	
+	if is_nightmare:
+		#game_over()
+		print("game over")
+
+	
+	get_tree().paused = false # Unpause
+
+func nightmare_mode():
+	is_nightmare = true
+	
+	sanity_timer.stop()
+	skill_check_timer.stop()
+	
+	var monster = get_node_or_null("Monster")
+	if monster != null:
+		monster.SPEED = 250.0
+		monster.player = $Player
+		monster.player_chase = true
+	
+	
+	
