@@ -44,5 +44,5 @@ func stun(durasi: float):
 	var stun_timer = get_tree().create_timer(durasi)
 	await stun_timer.timeout
 	
-	if has_node("Area2D"):
-		$Area2D.monitoring = true
+	if has_node("detect_area"):
+		$detect_area.monitoring = true

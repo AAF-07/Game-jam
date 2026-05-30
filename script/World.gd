@@ -1,7 +1,7 @@
 extends Node2D
 
 # buat control UI Skill check dan sanity
-var sanity = 100
+var sanity = 10
 var soul_collected = 0
 var arrow_key = ["ui_left", "ui_right", "ui_up", "ui_down"]
 var target_sequence = []
@@ -97,8 +97,8 @@ func start_skill_check():
 		if sanity_timer != null: sanity_timer.stop()
 		if skill_check_timer != null: skill_check_timer.start()
 	
-	var range = 10 if is_nightmare else 5
-	for i in range(range):
+	var jumlah = 10 if is_nightmare else 5
+	for i in range(jumlah):
 		var random_arrow = arrow_key[randi() % arrow_key.size()]
 		target_sequence.append(random_arrow)
 		
