@@ -9,6 +9,9 @@ radius = 64.40497
 [sub_resource type="CircleShape2D" id="CircleShape2D_4f2yx"]
 radius = 221.00226
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_wwmrk"]
+radius = 62.1289
+
 [node name="Monster" type="CharacterBody2D" unique_id=11607701]
 collision_layer = 2
 collision_mask = 2
@@ -16,12 +19,14 @@ script = ExtResource("1_4f2yx")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=402370689]
 modulate = Color(0, 1, 0, 1)
+light_mask = 3
+visibility_layer = 3
 position = Vector2(-2, 4)
 texture = ExtResource("1_xxklr")
 
-[node name="hitbox2" type="Area2D" parent="." unique_id=341007105]
+[node name="SkillCheck" type="Area2D" parent="." unique_id=341007105]
 
-[node name="hitbox" type="CollisionShape2D" parent="hitbox2" unique_id=1265782429]
+[node name="collision" type="CollisionShape2D" parent="SkillCheck" unique_id=1265782429]
 shape = SubResource("CircleShape2D_xxklr")
 
 [node name="detect_area" type="Area2D" parent="." unique_id=1955580695]
@@ -29,6 +34,10 @@ shape = SubResource("CircleShape2D_xxklr")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="detect_area" unique_id=363420032]
 shape = SubResource("CircleShape2D_4f2yx")
 
-[connection signal="body_entered" from="hitbox2" to="." method="_on_hitbox_2_body_entered"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1068839703]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_wwmrk")
+
+[connection signal="body_entered" from="SkillCheck" to="." method="_on_hitbox_2_body_entered"]
 [connection signal="body_entered" from="detect_area" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="detect_area" to="." method="_on_area_2d_body_exited"]

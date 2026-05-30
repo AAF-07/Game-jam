@@ -27,3 +27,32 @@ position = Vector2(578, 520)
 
 [node name="Monster" parent="." unique_id=2068469295 instance=ExtResource("3_jnrmd")]
 position = Vector2(969, 464)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1108986521]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="CanvasLayer" unique_id=1641479836]
+anchors_preset = -1
+anchor_right = 0.202
+anchor_bottom = 0.062000003
+offset_right = 0.29599
+offset_bottom = -0.1760025
+nine_patch_stretch = true
+tint_under = Color(0.37390757, 0.9927344, 0.9007767, 1)
+tint_over = Color(0.99341136, 0.0003155452, 0.8842428, 1)
+tint_progress = Color(0, 1, 1, 1)
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=1396017198]
+anchors_preset = -1
+anchor_left = 0.003
+anchor_top = 0.074
+anchor_right = 0.066
+anchor_bottom = 0.11000001
+offset_left = 0.5439999
+offset_top = 0.048000336
+offset_right = -0.03199768
+offset_bottom = -0.2800064
+text = "Soul "
+
+[node name="SanityTimer" type="Timer" parent="." unique_id=1314839600]
+
+[connection signal="timeout" from="SanityTimer" to="." method="_on_sanity_timer_timeout"]
